@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, type KeyboardEvent } from 'react';
-import Link from 'next/link';
-import { PLANS, planSlug, formatEUR } from '@/lib/content';
+import { PLANS, formatEUR, getPlanWhatsAppUrl } from '@/lib/content';
+import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 
 // Monthly reference = the real 1-month plan price. All savings are derived from
 // PLANS — nothing is hardcoded. If no 1-month plan exists, savings are hidden.
@@ -13,6 +13,7 @@ interface PlanMetrics {
   name: string;
   tagline: string;
   popular: boolean;
+  price: number;
   total: number;
   perMonth: number;
   savings: number; // vs paying month-to-month at MONTHLY_REFERENCE
@@ -27,6 +28,7 @@ const METRICS: PlanMetrics[] = PLANS.map((plan) => {
     name: plan.name,
     tagline: plan.tagline,
     popular: plan.popular,
+    price: plan.price,
     total: plan.price,
     perMonth,
     savings,
@@ -141,16 +143,21 @@ export default function PricingCalculator() {
             </div>
           </div>
 
-          <Link
-            href={`/contacto?plan=${planSlug(active)}`}
-            className="btn-cta mt-6 flex h-12 w-full items-center justify-center rounded-full text-base font-bold active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          <a
+            href={getPlanWhatsAppUrl(active)}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Solicitar por WhatsApp el plan de ${active.name} por ${formatEUR(active.total)}`}
+            className="btn-cta mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-full text-base font-bold shadow-[0_0_24px_-6px_rgba(196,91,255,0.6)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            Solicitar este plan
-          </Link>
+            <WhatsAppIcon className="h-5 w-5" />
+            Solicitar por WhatsApp
+          </a>
 
           <p className="mt-3 text-center text-sm text-gray-300">
-            Te indicamos los siguientes pasos para completar la contratación.
+            Se abrirá WhatsApp con el plan de {active.name.toLowerCase()} listo para enviar.
           </p>
+
 
           <p className="mt-4 text-center text-xs leading-relaxed text-gray-400">
             El ahorro se calcula comparando el precio del plan seleccionado con el coste equivalente

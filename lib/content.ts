@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import { Tv, Zap, Globe, ShieldCheck, Headphones, MonitorSmartphone } from 'lucide-react';
+import { SITE, getWhatsAppUrl } from './site';
 
 export const STATS: { value: string; label: string }[] = [
   { value: '+50.000', label: 'Canales en directo' },
@@ -72,8 +73,28 @@ export function getPlanBySlug(slug: string | undefined | null): Plan | undefined
 
 /** Format a number as EUR in Spanish locale (e.g. 59,99 €). */
 export function formatEUR(value: number): string {
-  return value.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+  return value
+    .toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })
+    .replace(/\u00a0/g, ' ');
 }
+
+/**
+ * Builds the standard Spanish prefilled WhatsApp message for a specific plan.
+ * e.g. "Hola, estoy interesado en el plan de 12 meses por 59,99 € de 4K SPAIN TV. Quisiera recibir más información."
+ */
+export function getPlanWhatsAppMessage(plan: Pick<Plan, 'months' | 'price'>): string {
+  const planName = plan.months === 1 ? '1 mes' : `${plan.months} meses`;
+  const formattedPrice = formatEUR(plan.price);
+  return `Hola, estoy interesado en el plan de ${planName} por ${formattedPrice} de ${SITE.brand}. Quisiera recibir más información.`;
+}
+
+/**
+ * Returns the WhatsApp link with prefilled message for a specific plan.
+ */
+export function getPlanWhatsAppUrl(plan: Pick<Plan, 'months' | 'price'>): string {
+  return getWhatsAppUrl(getPlanWhatsAppMessage(plan));
+}
+
 
 export const FAQ_ITEMS: { question: string; answer: string }[] = [
   {

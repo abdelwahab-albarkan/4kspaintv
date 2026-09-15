@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import { MessageCircle } from 'lucide-react';
-import { SITE } from '@/lib/site';
-import { getPlanBySlug, formatEUR } from '@/lib/content';
+import { Mail } from 'lucide-react';
+import { SITE, DEFAULT_WHATSAPP_CONTACT_MESSAGE, getWhatsAppUrl } from '@/lib/site';
+import { getPlanBySlug, formatEUR, getPlanWhatsAppUrl } from '@/lib/content';
 import HowItWorks from '@/components/commerce/HowItWorks';
+import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 
 export const metadata: Metadata = {
   title: 'Contacto y soporte | Atención 24/7',
@@ -19,6 +20,10 @@ export default async function ContactoPage({
   const { plan: planParam } = await searchParams;
   // Validate the untrusted query param against real PLANS. Unknown → no plan.
   const plan = getPlanBySlug(planParam);
+
+  const whatsappHref = plan
+    ? getPlanWhatsAppUrl(plan)
+    : getWhatsAppUrl(DEFAULT_WHATSAPP_CONTACT_MESSAGE);
 
   // Build a pre-filled mailto only when a real plan was selected.
   const mailtoHref = plan
@@ -51,22 +56,42 @@ export default async function ContactoPage({
         </div>
       )}
 
-      <div className="mt-10 inline-flex flex-col items-center gap-4 rounded-2xl border border-border-subtle bg-surface-card p-8">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-900/40 text-primary-500">
-          <MessageCircle size={28} />
+      {/* Primary WhatsApp Card */}
+      <div className="mx-auto mt-10 max-w-md rounded-2xl border border-primary-500 bg-surface-card p-8 shadow-glow">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366]/20 text-[#25D366]">
+          <WhatsAppIcon className="h-8 w-8" />
         </div>
-        <p className="text-white">
+
+        <h2 className="mt-4 font-display text-xl font-bold text-white">
+          {plan ? 'Solicitar suscripción por WhatsApp' : 'Atención directa por WhatsApp'}
+        </h2>
+        <p className="mt-2 text-sm text-gray-300">
           {plan
-            ? 'Escríbenos con tu plan y te indicamos los siguientes pasos'
-            : 'Escríbenos y te respondemos con los siguientes pasos'}
+            ? `Escríbenos para activar tu plan de ${plan.name.toLowerCase()} (${formatEUR(plan.price)}) de forma inmediata.`
+            : 'Respondemos tus dudas en minutos. Soporte 24/7 en español.'}
         </p>
+
         <a
-          href={mailtoHref}
-          className="rounded-full bg-primary-500 px-6 py-3 font-semibold text-black hover:bg-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={plan ? `Solicitar por WhatsApp el plan de ${plan.name}` : 'Contactar por WhatsApp'}
+          className="btn-cta mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-full text-base font-bold shadow-[0_0_24px_-6px_rgba(196,91,255,0.6)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          {plan ? 'Escribir para contratar' : SITE.contactEmail}
+          <WhatsAppIcon className="h-5 w-5" />
+          Solicitar por WhatsApp
         </a>
-        {plan && <p className="text-sm text-gray-400">{SITE.contactEmail}</p>}
+
+        <div className="mt-6 border-t border-border-subtle/60 pt-6">
+          <p className="text-xs text-gray-400">¿Prefieres contactar por correo electrónico?</p>
+          <a
+            href={mailtoHref}
+            className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-cyan hover:underline"
+          >
+            <Mail size={16} />
+            {SITE.contactEmail}
+          </a>
+        </div>
       </div>
 
       {/* Reminder of the real, email-based process */}
@@ -76,3 +101,4 @@ export default async function ContactoPage({
     </section>
   );
 }
+

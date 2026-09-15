@@ -28,14 +28,13 @@ export const SITE = {
   /** Support inbox, derived from the host so the domain lives in one place. */
   contactEmail: `soporte@${HOST_VALUE}`,
   /**
-   * WhatsApp number in international format WITHOUT '+' or spaces (e.g. 34600000000).
-   * Empty by default — the WhatsApp button/link only renders once a real number
-   * is set here. Never invent a number.
+   * WhatsApp number in international format WITHOUT '+' or spaces.
+   * e.g. 212625218443
    */
-  whatsapp: '',
-  name: '4K Spain TV',
+  whatsapp: '212625218443',
+  name: '4K SPAIN TV',
   /** Brand as shown to users. */
-  brand: '4K Spain TV',
+  brand: '4K SPAIN TV',
   /** BCP-47 locale for <html lang> derivation and metadata. */
   locale: 'es-ES',
   /** Open Graph locale form. */
@@ -57,7 +56,23 @@ export const SITE = {
   themeColor: '#7C2CFF',
 } as const;
 
+/** Central WhatsApp configuration */
+export const WHATSAPP_NUMBER = '212625218443';
+export const WHATSAPP_BASE_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+
+/** Default generic message when no specific plan is chosen */
+export const DEFAULT_WHATSAPP_CONTACT_MESSAGE = `Hola, me gustaría recibir información sobre los planes de ${SITE.brand}.`;
+
+/** Build a WhatsApp URL with optional pre-filled message text */
+export function getWhatsAppUrl(message?: string): string {
+  if (!message || !message.trim()) {
+    return WHATSAPP_BASE_URL;
+  }
+  return `${WHATSAPP_BASE_URL}?text=${encodeURIComponent(message.trim())}`;
+}
+
 /** Build an absolute URL from a site-relative path. */
 export function absoluteUrl(path = '/'): string {
   return `${SITE.url}${path.startsWith('/') ? path : `/${path}`}`;
 }
+

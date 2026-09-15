@@ -1,8 +1,8 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import { Check, ShieldCheck } from 'lucide-react';
-import { PLANS, planSlug } from '@/lib/content';
+import { PLANS, formatEUR, getPlanWhatsAppUrl } from '@/lib/content';
 import { PAYMENT_METHODS } from '@/lib/assets';
+import WhatsAppIcon from '@/components/common/WhatsAppIcon';
 
 const INCLUDED = [
   '+50.000 canales en directo',
@@ -43,7 +43,7 @@ export default function Pricing() {
               <p className="mt-1 text-sm text-gray-400">{plan.tagline}</p>
               <p className="mt-6">
                 <span className="font-display text-4xl font-extrabold text-white">
-                  {plan.price.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
+                  {formatEUR(plan.price)}
                 </span>
               </p>
               <ul className="mt-6 flex-1 space-y-2">
@@ -54,23 +54,28 @@ export default function Pricing() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href={`/contacto?plan=${planSlug(plan)}`}
-                className={`mt-6 rounded-full px-5 py-2.5 text-center text-sm font-bold ${
+              <a
+                href={getPlanWhatsAppUrl(plan)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Solicitar por WhatsApp el plan de ${plan.name} por ${formatEUR(plan.price)}`}
+                className={`mt-6 inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-center text-sm font-bold transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                   plan.popular
-                    ? 'btn-cta'
-                    : 'border border-border-subtle text-white hover:bg-surface-hover'
+                    ? 'btn-cta shadow-[0_0_24px_-6px_rgba(196,91,255,0.6)]'
+                    : 'border border-border-subtle text-white hover:border-cyan/40 hover:bg-surface-hover'
                 }`}
               >
-                Solicitar este plan
-              </Link>
+                <WhatsAppIcon className="h-4 w-4" />
+                Solicitar por WhatsApp
+              </a>
             </div>
           ))}
         </div>
 
         <p className="mt-6 text-center text-sm text-gray-300">
-          Al pulsar te llevamos al contacto con el plan ya seleccionado.
+          Al pulsar se abrirá WhatsApp con el mensaje preparado para solicitar tu suscripción.
         </p>
+
 
         {/* Payment methods row */}
         <div className="mt-14 flex flex-col items-center gap-5 border-t border-border-subtle pt-10">
