@@ -9,7 +9,9 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  // Images are served WITHOUT the Vercel optimizer (images.unoptimized), so
+  // remote images load directly from their CDN and must be allow-listed here.
+  "img-src 'self' data: blob: https://image.tmdb.org https://media.api-sports.io https://r2.thesportsdb.com https://www.thesportsdb.com",
   "font-src 'self' data:",
   `connect-src 'self'${isDev ? ' ws: wss:' : ''}`,
   "media-src 'self'",
@@ -36,15 +38,17 @@ const nextConfig = {
   reactStrictMode: true,
 
   images: {
-    // Serve modern formats first; Next negotiates by Accept header.
+    // Serve images WITHOUT Vercel Image Optimization. The optimizer is a metered
+    // service whose quota, once exhausted, makes /_next/image return HTTP 402 for
+    // EVERY image (local and remote), breaking the whole site — which is exactly
+    // what happened in production. With unoptimized, local /public assets are
+    // served directly (they are already small WebP/JPEG after the earlier cleanup,
+    // so no payload regression) and remote images load straight from their CDN.
+    // remotePatterns is still required: next/image validates remote src hosts even
+    // when unoptimized. formats/minimumCacheTTL are inert while unoptimized.
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
-    // Cache each optimized image for 30 days. Source URLs (local hashed assets,
-    // TMDB poster paths, football logos) are content-stable — a given URL never
-    // changes its bytes — so a long TTL is safe and sharply cuts billable Vercel
-    // Image Optimization transformations (mitigates the HTTP 402 quota risk).
     minimumCacheTTL: 2592000,
-    // TMDB posters/backdrops are fetched + optimized server-side by next/image,
-    // then served same-origin (/_next/image), so the CSP img-src 'self' still holds.
     remotePatterns: [
       { protocol: 'https', hostname: 'image.tmdb.org', pathname: '/t/p/**' },
       // Football logos/badges, fetched + optimized server-side by next/image.

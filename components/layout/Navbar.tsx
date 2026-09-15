@@ -94,7 +94,7 @@ export default function Navbar() {
       {isOpen && (
         <div
           id="mobile-menu"
-          className="fixed inset-0 z-40 flex flex-col overflow-y-auto overscroll-contain bg-background/98 px-6 pb-10 pt-6 backdrop-blur-lg lg:hidden"
+          className="fixed inset-0 z-[60] flex flex-col overflow-y-auto overscroll-contain bg-background/98 px-6 pb-10 pt-6 backdrop-blur-lg lg:hidden"
         >
           <div className="mb-6 flex items-center justify-between">
             <Logo variant="mark" />
