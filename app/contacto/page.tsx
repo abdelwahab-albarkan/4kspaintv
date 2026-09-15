@@ -1,0 +1,78 @@
+import type { Metadata } from 'next';
+import { MessageCircle } from 'lucide-react';
+import { SITE } from '@/lib/site';
+import { getPlanBySlug, formatEUR } from '@/lib/content';
+import HowItWorks from '@/components/commerce/HowItWorks';
+
+export const metadata: Metadata = {
+  title: 'Contacto y soporte | Atención 24/7',
+  description:
+    'Contacta con el equipo de 4K Spain TV. Soporte 24/7 en español para ayudarte con la configuración, el pago y cualquier duda.',
+  alternates: { canonical: '/contacto' },
+};
+
+export default async function ContactoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ plan?: string }>;
+}) {
+  const { plan: planParam } = await searchParams;
+  // Validate the untrusted query param against real PLANS. Unknown → no plan.
+  const plan = getPlanBySlug(planParam);
+
+  // Build a pre-filled mailto only when a real plan was selected.
+  const mailtoHref = plan
+    ? `mailto:${SITE.contactEmail}?subject=${encodeURIComponent(
+        `Solicitud de plan IPTV — ${plan.name}`,
+      )}&body=${encodeURIComponent(
+        `Hola,\n\nQuiero contratar el plan de ${plan.name} por ${formatEUR(plan.price)}.\n\nQuedo atento a los pasos para continuar.\n\nGracias.`,
+      )}`
+    : `mailto:${SITE.contactEmail}`;
+
+  return (
+    <section className="mx-auto max-w-3xl px-6 py-20 text-center">
+      <h1 className="font-display text-4xl font-extrabold text-white md:text-5xl">Contacto</h1>
+      <p className="mx-auto mt-4 max-w-xl text-gray-400">
+        ¿Tienes dudas antes de contratar o necesitas ayuda con la configuración? Nuestro equipo de
+        soporte está disponible las 24 horas, los 7 días de la semana.
+      </p>
+
+      {/* Selected plan summary (only when a valid plan was passed) */}
+      {plan && (
+        <div className="mx-auto mt-10 max-w-md rounded-2xl border border-primary-500 bg-surface-card p-6 text-left shadow-glow">
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Plan seleccionado</p>
+          <div className="mt-2 flex items-baseline justify-between gap-4">
+            <span className="font-display text-xl font-extrabold text-white">{plan.name}</span>
+            <span className="font-display text-xl font-extrabold text-cyan">{formatEUR(plan.price)}</span>
+          </div>
+          <p className="mt-1 text-sm text-gray-300">
+            Duración: {plan.months} {plan.months === 1 ? 'mes' : 'meses'}
+          </p>
+        </div>
+      )}
+
+      <div className="mt-10 inline-flex flex-col items-center gap-4 rounded-2xl border border-border-subtle bg-surface-card p-8">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-900/40 text-primary-500">
+          <MessageCircle size={28} />
+        </div>
+        <p className="text-white">
+          {plan
+            ? 'Escríbenos con tu plan y te indicamos los siguientes pasos'
+            : 'Escríbenos y te respondemos con los siguientes pasos'}
+        </p>
+        <a
+          href={mailtoHref}
+          className="rounded-full bg-primary-500 px-6 py-3 font-semibold text-black hover:bg-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
+          {plan ? 'Escribir para contratar' : SITE.contactEmail}
+        </a>
+        {plan && <p className="text-sm text-gray-400">{SITE.contactEmail}</p>}
+      </div>
+
+      {/* Reminder of the real, email-based process */}
+      <div className="mt-16 text-left">
+        <HowItWorks standalone={false} />
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/* ────────────────────────────────────────────────────────────
+   4K Spain TV — Design System
+   Premium streaming SaaS: dark purple background, violet gradients,
+   electric-cyan accents, orange→pink CTA. One token source of truth.
+   The legacy `emerald-*` and `gray-*` scales are remapped here so the
+   whole site recolors from this single file.
+   ──────────────────────────────────────────────────────────── */
+@theme {
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-poppins);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
+
+  /* Surfaces */
+  --color-background: #0c0518;
+  --color-background-secondary: #150826;
+  --color-surface: #160a29;
+  --color-surface-card: #1a0f33;
+  --color-surface-hover: #241546;
+  --color-border-subtle: #2c1d4a;
+
+  /* Brand — purple primary ramp */
+  --color-primary-50: #f3ecff;
+  --color-primary-100: #e4d4ff;
+  --color-primary-200: #cbabff;
+  --color-primary-400: #9a5cff;
+  --color-primary-500: #7c2cff;
+  --color-primary-600: #6a1fe6;
+  --color-primary-700: #5b18a8;
+  --color-primary-900: #2a1250;
+
+  /* Named accents */
+  --color-cyan: #00d9ff;
+  --color-cyan-bright: #5ce9ff;
+  --color-purple-bright: #7c2cff;
+  --color-pink: #c45bff;
+  --color-orange: #ff9f1c;
+
+  /* Legacy emerald-* remapped → electric cyan (site-wide accent) */
+  --color-emerald-300: #8beeff;
+  --color-emerald-400: #33ddff;
+  --color-emerald-500: #00d9ff;
+  --color-emerald-600: #00b6d9;
+  --color-emerald-950: #0a2436;
+
+  /* Secondary text → lavender */
+  --color-gray-300: #cfc4e6;
+  --color-gray-400: #a99cc6;
+
+  --shadow-glow: 0 0 40px -6px rgba(124, 44, 255, 0.5);
+  --shadow-glow-cyan: 0 0 34px -8px rgba(0, 217, 255, 0.45);
+  --shadow-card: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset, 0 24px 60px -28px rgba(0, 0, 0, 0.9);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-background);
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-background);
+    /* Ambient violet + cyan glow, fixed behind all content */
+    background-image:
+      radial-gradient(1200px 620px at 50% -8%, rgba(124, 44, 255, 0.28), transparent 60%),
+      radial-gradient(760px 460px at 100% 2%, rgba(0, 217, 255, 0.10), transparent 55%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #ece7f5;
+  }
+
+  ::selection {
+    background-color: rgba(0, 217, 255, 0.30);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cyan);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #4b2c7a #160a29;
+  }
+
+  a,
+  button {
+    transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Headline highlight — white → lavender → cyan */
+  .text-gradient {
+    background-image: linear-gradient(115deg, #ffffff 0%, #c9b8ff 45%, #00d9ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Primary CTA — orange → pink/purple gradient (matches reference) */
+  .btn-cta {
+    background-image: linear-gradient(90deg, #ff9f1c 0%, #ff5db1 52%, #c45bff 100%);
+    color: #16071f;
+  }
+  .btn-cta:hover {
+    filter: brightness(1.07);
+  }
+
+  /* Frosted translucent surface for floating chrome / mockups */
+  .glass {
+    background-color: rgba(26, 15, 51, 0.6);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(168, 130, 255, 0.14);
+  }
+
+  .glow-purple {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Ambient dotted grid for section backgrounds */
+  .bg-grid {
+    background-image: radial-gradient(rgba(168, 130, 255, 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Cinematic auto-scrolling row (movies / series posters). Two identical
+     groups slide -50% for a seamless loop; pauses on hover, honors reduced motion. */
+  .marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-x var(--marquee-duration, 60s) linear infinite;
+    will-change: transform;
+  }
+  .marquee-track.is-reverse {
+    animation-direction: reverse;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  @keyframes marquee-x {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+}
