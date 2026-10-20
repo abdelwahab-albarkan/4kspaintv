@@ -37,6 +37,11 @@ export function getProductSchema() {
     '@type': 'Product',
     name: `${SITE.brand} — Suscripción IPTV Premium 4K`,
     description: SITE.description,
+    image: [
+      absoluteUrl('/home-hero.jpg'),
+      absoluteUrl('/logospain.png'),
+    ],
+    sku: '4KSPAIN-IPTV-PREMIUM',
     brand: {
       '@type': 'Brand',
       name: SITE.name,
@@ -46,8 +51,44 @@ export function getProductSchema() {
       name: `Plan IPTV ${plan.name}`,
       price: plan.price.toFixed(2),
       priceCurrency: 'EUR',
+      priceValidUntil: '2026-12-31',
       availability: 'https://schema.org/InStock',
       url: absoluteUrl('/precios'),
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'ES',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 7,
+        returnMethod: 'https://schema.org/ReturnByMail',
+        returnFees: 'https://schema.org/FreeReturn',
+      },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '0.00',
+          currency: 'EUR',
+        },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 0,
+            maxValue: 0,
+            unitCode: 'DAY',
+          },
+          transitTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 0,
+            maxValue: 0,
+            unitCode: 'DAY',
+          },
+        },
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: 'ES',
+        },
+      },
     })),
   };
 }
