@@ -52,11 +52,12 @@ export function getProductSchema() {
   };
 }
 
-export function getFaqSchema() {
+export function getFaqSchema(items?: { question: string; answer: string }[]) {
+  const source = items && items.length > 0 ? items : FAQ_ITEMS;
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: FAQ_ITEMS.map((item) => ({
+    mainEntity: source.map((item) => ({
       '@type': 'Question',
       name: item.question,
       acceptedAnswer: {

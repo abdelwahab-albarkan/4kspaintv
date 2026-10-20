@@ -4,13 +4,12 @@ import { Trophy, CheckCircle2, ArrowRight } from 'lucide-react';
 import SportsTeaser from '@/components/sections/SportsTeaser';
 import FootballHub from '@/components/football/FootballHub';
 import Pricing from '@/components/sections/Pricing';
-import Faq from '@/components/sections/Faq';
 import Cta from '@/components/sections/Cta';
 import JsonLd from '@/components/common/JsonLd';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import RelatedLinks from '@/components/common/RelatedLinks';
 import { KEYWORD_MAP } from '@/lib/keyword-map';
-import { getProductSchema, getFaqSchema, getBreadcrumbSchema } from '@/lib/structured-data';
+import { getBreadcrumbSchema } from '@/lib/structured-data';
 
 const pageData = KEYWORD_MAP['/iptv-deporte'];
 
@@ -49,13 +48,11 @@ const SPORTS_CATEGORIES = [
 ];
 
 export default function IptvDeportePage() {
-  const productSchema = getProductSchema();
-  const faqSchema = getFaqSchema();
   const breadcrumbSchema = getBreadcrumbSchema([{ name: 'IPTV Deporte', item: pageData.route }]);
 
   return (
     <>
-      <JsonLd data={[productSchema, faqSchema, breadcrumbSchema]} />
+      <JsonLd data={[breadcrumbSchema]} />
       <main className="mx-auto max-w-6xl px-6 pt-8">
         <Breadcrumbs items={[{ label: 'IPTV Deporte', href: pageData.route }]} />
 
@@ -120,7 +117,6 @@ export default function IptvDeportePage() {
       </main>
 
       <Pricing />
-      <Faq />
       <Cta />
       <RelatedLinks links={pageData.relatedLinks} />
     </>

@@ -14,7 +14,7 @@ interface StaticRouteDef {
 
 // Explicit static marketing routes. Excludes legal noindex pages (/aviso-legal, /privacidad, /terminos).
 const STATIC_ROUTES: StaticRouteDef[] = [
-  { path: '/', priority: 1.0, changeFrequency: 'weekly' },
+  { path: '', priority: 1.0, changeFrequency: 'weekly' },
   { path: '/comprar-iptv', priority: 0.9, changeFrequency: 'weekly' },
   { path: '/mejor-iptv', priority: 0.9, changeFrequency: 'weekly' },
   { path: '/comparativa-iptv', priority: 0.9, changeFrequency: 'weekly' },

@@ -3,13 +3,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Tv, Cpu, Smartphone, Monitor, ArrowRight } from 'lucide-react';
 import Cta from '@/components/sections/Cta';
-import Faq from '@/components/sections/Faq';
 import JsonLd from '@/components/common/JsonLd';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import RelatedLinks from '@/components/common/RelatedLinks';
 import { KEYWORD_MAP } from '@/lib/keyword-map';
 import { DEVICE_IMAGES, DEVICE_GALLERY } from '@/lib/assets';
-import { getProductSchema, getFaqSchema, getBreadcrumbSchema } from '@/lib/structured-data';
+import { getBreadcrumbSchema } from '@/lib/structured-data';
 
 const pageData = KEYWORD_MAP['/dispositivos'];
 
@@ -60,13 +59,11 @@ const DEVICE_CATEGORIES = [
 ];
 
 export default function DispositivosHubPage() {
-  const productSchema = getProductSchema();
-  const faqSchema = getFaqSchema();
   const breadcrumbSchema = getBreadcrumbSchema([{ name: 'Dispositivos', item: pageData.route }]);
 
   return (
     <>
-      <JsonLd data={[productSchema, faqSchema, breadcrumbSchema]} />
+      <JsonLd data={[breadcrumbSchema]} />
       <main className="mx-auto max-w-6xl px-6 pt-8">
         <Breadcrumbs items={[{ label: 'Dispositivos', href: pageData.route }]} />
 
@@ -158,7 +155,6 @@ export default function DispositivosHubPage() {
         </section>
       </main>
 
-      <Faq />
       <Cta />
       <RelatedLinks links={pageData.relatedLinks} />
     </>

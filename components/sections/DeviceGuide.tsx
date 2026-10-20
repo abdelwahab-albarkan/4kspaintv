@@ -10,10 +10,8 @@ import {
 import JsonLd from '@/components/common/JsonLd';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import RelatedLinks from '@/components/common/RelatedLinks';
-import Faq from '@/components/sections/Faq';
 import Cta from '@/components/sections/Cta';
 import {
-  getProductSchema,
   getFaqSchema,
   getBreadcrumbSchema,
 } from '@/lib/structured-data';
@@ -68,15 +66,16 @@ export default function DeviceGuide({
   heroImage,
   siblingLinks,
 }: DeviceGuideProps) {
-  const productSchema = getProductSchema();
-  const faqSchema = getFaqSchema();
+  const faqSchema = troubleshooting && troubleshooting.length > 0 ? getFaqSchema(troubleshooting) : null;
   const breadcrumbSchema = getBreadcrumbSchema([{ name: h1, item: route }]);
   // Fall back to the central asset map so every device route gets its own image.
   const img = heroImage ?? DEVICE_IMAGES[route];
 
+  const schemas = faqSchema ? [faqSchema, breadcrumbSchema] : [breadcrumbSchema];
+
   return (
     <>
-      <JsonLd data={[productSchema, faqSchema, breadcrumbSchema]} />
+      <JsonLd data={schemas} />
 
       <main className="mx-auto max-w-6xl px-6 pt-8">
         <Breadcrumbs items={[{ label: h1, href: route }]} />
@@ -208,7 +207,6 @@ export default function DeviceGuide({
         </section>
       </main>
 
-      <Faq />
       <Cta />
       <RelatedLinks links={siblingLinks} title="Otras guías de dispositivos e instalación" />
     </>

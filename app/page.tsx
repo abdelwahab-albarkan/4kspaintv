@@ -17,7 +17,6 @@ import {
   getOrganizationSchema,
   getWebSiteSchema,
   getProductSchema,
-  getFaqSchema,
 } from '@/lib/structured-data';
 
 // ISR revalidate every 1 hour (3600 seconds)
@@ -41,7 +40,6 @@ export default function HomePage() {
     getOrganizationSchema(),
     getWebSiteSchema(),
     getProductSchema(),
-    getFaqSchema(),
   ];
 
   return (

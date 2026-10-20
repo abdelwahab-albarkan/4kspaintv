@@ -4,12 +4,11 @@ import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { SMARTERS_SHOTS } from '@/lib/assets';
 import Cta from '@/components/sections/Cta';
-import Faq from '@/components/sections/Faq';
 import JsonLd from '@/components/common/JsonLd';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import RelatedLinks from '@/components/common/RelatedLinks';
 import { KEYWORD_MAP } from '@/lib/keyword-map';
-import { getFaqSchema, getBreadcrumbSchema } from '@/lib/structured-data';
+import { getBreadcrumbSchema } from '@/lib/structured-data';
 
 const pageData = KEYWORD_MAP['/iptv-smarters-pro'];
 
@@ -44,12 +43,11 @@ const SETUP_STEPS = [
 ];
 
 export default function IptvSmartersProPage() {
-  const faqSchema = getFaqSchema();
   const breadcrumbSchema = getBreadcrumbSchema([{ name: 'IPTV Smarters Pro', item: pageData.route }]);
 
   return (
     <>
-      <JsonLd data={[faqSchema, breadcrumbSchema]} />
+      <JsonLd data={[breadcrumbSchema]} />
       <main className="mx-auto max-w-6xl px-6 pt-8">
         <Breadcrumbs items={[{ label: 'IPTV Smarters Pro', href: pageData.route }]} />
         
@@ -133,7 +131,6 @@ export default function IptvSmartersProPage() {
         </section>
       </main>
 
-      <Faq />
       <Cta />
       <RelatedLinks links={pageData.relatedLinks} />
     </>

@@ -8,7 +8,7 @@ import JsonLd from '@/components/common/JsonLd';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import RelatedLinks from '@/components/common/RelatedLinks';
 import { KEYWORD_MAP } from '@/lib/keyword-map';
-import { getProductSchema, getFaqSchema, getBreadcrumbSchema } from '@/lib/structured-data';
+import { getProductSchema, getBreadcrumbSchema } from '@/lib/structured-data';
 
 const pageData = KEYWORD_MAP['/precios'];
 
@@ -21,12 +21,11 @@ export const metadata: Metadata = {
 
 export default function PreciosPage() {
   const productSchema = getProductSchema();
-  const faqSchema = getFaqSchema();
   const breadcrumbSchema = getBreadcrumbSchema([{ name: 'Precios', item: pageData.route }]);
 
   return (
     <>
-      <JsonLd data={[productSchema, faqSchema, breadcrumbSchema]} />
+      <JsonLd data={[productSchema, breadcrumbSchema]} />
       <main className="mx-auto max-w-6xl px-6 pt-8">
         <Breadcrumbs items={[{ label: 'Precios', href: pageData.route }]} />
         <section className="py-12 text-center md:py-16">

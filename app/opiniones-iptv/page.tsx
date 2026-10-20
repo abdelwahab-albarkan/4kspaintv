@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
 import { Star } from 'lucide-react';
 import Pricing from '@/components/sections/Pricing';
-import Faq from '@/components/sections/Faq';
 import Cta from '@/components/sections/Cta';
 import JsonLd from '@/components/common/JsonLd';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import RelatedLinks from '@/components/common/RelatedLinks';
 import { KEYWORD_MAP } from '@/lib/keyword-map';
-import { getProductSchema, getFaqSchema, getBreadcrumbSchema } from '@/lib/structured-data';
+import { getBreadcrumbSchema } from '@/lib/structured-data';
 
 const pageData = KEYWORD_MAP['/opiniones-iptv'];
 
@@ -43,13 +42,11 @@ const REVIEWS = [
 ];
 
 export default function OpinionesIptvPage() {
-  const productSchema = getProductSchema();
-  const faqSchema = getFaqSchema();
   const breadcrumbSchema = getBreadcrumbSchema([{ name: 'Opiniones IPTV', item: pageData.route }]);
 
   return (
     <>
-      <JsonLd data={[productSchema, faqSchema, breadcrumbSchema]} />
+      <JsonLd data={[breadcrumbSchema]} />
       <main className="mx-auto max-w-6xl px-6 pt-8">
         <Breadcrumbs items={[{ label: 'Opiniones IPTV', href: pageData.route }]} />
         <section className="py-12 text-center md:py-16">
@@ -89,7 +86,6 @@ export default function OpinionesIptvPage() {
       </main>
 
       <Pricing />
-      <Faq />
       <Cta />
       <RelatedLinks links={pageData.relatedLinks} />
     </>

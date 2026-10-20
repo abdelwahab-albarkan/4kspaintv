@@ -7,10 +7,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/offline', '/api/', '/_next/'],
+        disallow: ['/offline', '/api/'],
       },
     ],
     sitemap: absoluteUrl('/sitemap.xml'),
-    host: SITE.url,
+    host: SITE.host,
   };
 }

@@ -2,12 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Database, Code, CheckCircle2, ArrowRight } from 'lucide-react';
 import Cta from '@/components/sections/Cta';
-import Faq from '@/components/sections/Faq';
 import JsonLd from '@/components/common/JsonLd';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import RelatedLinks from '@/components/common/RelatedLinks';
 import { KEYWORD_MAP } from '@/lib/keyword-map';
-import { getFaqSchema, getBreadcrumbSchema, getHowToSchema, type HowToStepItem } from '@/lib/structured-data';
+import { getBreadcrumbSchema, getHowToSchema, type HowToStepItem } from '@/lib/structured-data';
 
 const pageData = KEYWORD_MAP['/iptv-m3u'];
 
@@ -51,7 +50,6 @@ const DEVICE_LINKS = [
 ];
 
 export default function IptvM3uPage() {
-  const faqSchema = getFaqSchema();
   const breadcrumbSchema = getBreadcrumbSchema([{ name: 'IPTV M3U & Xtream', item: pageData.route }]);
   const howToSchema = getHowToSchema(
     'Cómo configurar una lista IPTV M3U y Xtream Codes API',
@@ -61,7 +59,7 @@ export default function IptvM3uPage() {
 
   return (
     <>
-      <JsonLd data={[faqSchema, breadcrumbSchema, howToSchema]} />
+      <JsonLd data={[breadcrumbSchema, howToSchema]} />
       <main className="mx-auto max-w-6xl px-6 pt-8">
         <Breadcrumbs items={[{ label: 'IPTV M3U & Xtream', href: pageData.route }]} />
 
@@ -167,7 +165,6 @@ export default function IptvM3uPage() {
         </section>
       </main>
 
-      <Faq />
       <Cta />
       <RelatedLinks links={pageData.relatedLinks} />
     </>

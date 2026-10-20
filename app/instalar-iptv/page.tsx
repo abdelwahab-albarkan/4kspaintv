@@ -2,12 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Tv, Cpu, Smartphone, Laptop, ArrowRight } from 'lucide-react';
 import Cta from '@/components/sections/Cta';
-import Faq from '@/components/sections/Faq';
 import JsonLd from '@/components/common/JsonLd';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import RelatedLinks from '@/components/common/RelatedLinks';
 import { KEYWORD_MAP } from '@/lib/keyword-map';
-import { getFaqSchema, getBreadcrumbSchema, getHowToSchema, type HowToStepItem } from '@/lib/structured-data';
+import { getBreadcrumbSchema, getHowToSchema, type HowToStepItem } from '@/lib/structured-data';
 
 const pageData = KEYWORD_MAP['/instalar-iptv'];
 
@@ -51,7 +50,6 @@ const DEVICE_QUICK_LINKS = [
 ];
 
 export default function InstalarIptvPage() {
-  const faqSchema = getFaqSchema();
   const breadcrumbSchema = getBreadcrumbSchema([{ name: 'Instalar IPTV', item: pageData.route }]);
   const howToSchema = getHowToSchema(
     'Cómo instalar IPTV en cualquier dispositivo',
@@ -61,7 +59,7 @@ export default function InstalarIptvPage() {
 
   return (
     <>
-      <JsonLd data={[faqSchema, breadcrumbSchema, howToSchema]} />
+      <JsonLd data={[breadcrumbSchema, howToSchema]} />
       <main className="mx-auto max-w-6xl px-6 pt-8">
         <Breadcrumbs items={[{ label: 'Instalar IPTV', href: pageData.route }]} />
 
@@ -128,7 +126,6 @@ export default function InstalarIptvPage() {
         </section>
       </main>
 
-      <Faq />
       <Cta />
       <RelatedLinks links={pageData.relatedLinks} />
     </>
